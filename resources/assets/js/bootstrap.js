@@ -11,6 +11,8 @@ try {
     window.$ = window.jQuery = require('jquery');
 
     require('bootstrap-sass');
+    require('./messenger/messenger.min.js');
+    require('./messenger/messenger-theme-future.js');
 } catch (e) {}
 
 /**
@@ -36,6 +38,11 @@ if (token) {
 } else {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
+
+//self-define
+// window.axios.defaults.validateStatus= function (status) {
+//     return status >= 200 && status < 300; // 默认的
+// };
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
