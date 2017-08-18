@@ -11,8 +11,8 @@ try {
     window.$ = window.jQuery = require('jquery');
 
     require('bootstrap-sass');
-    require('./messenger/messenger.min.js');
-    require('./messenger/messenger-theme-future.js');
+    // require('./messenger/messenger.min.js');
+    // require('./messenger/messenger-theme-future.js');
 } catch (e) {}
 
 /**
@@ -24,6 +24,7 @@ try {
 window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.timeout = 10000;
 
 /**
  * Next we will register the CSRF Token as a common header with Axios so that

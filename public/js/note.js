@@ -76,89 +76,99 @@ var note = new Vue({
         classification: ''
     },
     mounted: function mounted() {
-        Messenger.options = {
-            extraClasses: 'messenger-fixed messenger-on-bottom messenger-on-right',
-            theme: 'ice'
-        };
+        // Messenger.options = {
+        //     extraClasses: 'messenger-fixed messenger-on-bottom messenger-on-right',
+        //     theme: 'ice'
+        // };
         $('[data-toggle="tooltip"]').tooltip();
     },
     methods: {
-        completeNote: function function_name(noteId) {
-            var addNoteMessage = Messenger().info({
-                message: "processing...."
-            });
+        completeNote: function completeNote(noteId) {
+            layer.load(2, { time: 10000 });
             axios.post('/notes/' + noteId, {
                 _method: 'PUT',
                 status: 'completed'
             }).then(function (res) {
-                addNoteMessage.update({
-                    type: "success",
-                    message: "delete success"
+                layer.closeAll('loading');
+                layer.msg('success!!', {
+                    icon: 1,
+                    time: 1000
+                }, function () {
+                    location.reload();
                 });
-                location.reload();
-            }.bind(this)).catch(function (err) {
-                addNoteMessage.update({
-                    type: "error",
-                    message: "delete failed"
+            }).catch(function (err) {
+                layer.closeAll('loading');
+                layer.msg('failed', {
+                    icon: 2,
+                    time: 2000
                 });
-            }.bind(this));
+            });
         },
-        deleteNoteForce: function (noteId) {
+        deleteNoteForce: function deleteNoteForce(noteId) {
             layer.confirm('Sure to delete this note completely?', {
                 btn: ['ok', 'cancle'] //按钮
             }, function () {
                 axios.post("/notes/delete", {
                     noteId: noteId
                 }).then(function (res) {
-                    layer.msg('success!!', function () {
+                    layer.closeAll('loading');
+                    layer.msg('success!!', {
+                        icon: 1,
+                        time: 1000
+                    }, function () {
                         location.reload();
                     });
                 }).catch(function (err) {
-                    layer.msg('failed', function () {
-                        // location.reload();
+                    layer.closeAll('loading');
+                    layer.msg('failed', {
+                        icon: 2,
+                        time: 2000
                     });
                 });
             }, function () {});
-        }.bind(this),
+        },
         deleteNote: function deleteNote(noteId) {
-            var addNoteMessage = Messenger().info({
-                message: "deleting...."
-            });
+            layer.load(2, { time: 10000 });
             axios.post('/notes/' + noteId, {
                 _method: 'DELETE'
             }).then(function (res) {
-                addNoteMessage.update({
-                    type: "success",
-                    message: "delete success"
+                layer.closeAll('loading');
+                layer.msg('success!!', {
+                    icon: 1,
+                    time: 1000
+                }, function () {
+                    location.reload();
                 });
-                location.reload();
-            }.bind(this)).catch(function (err) {
-                addNoteMessage.update({
-                    type: "error",
-                    message: "delete failed"
+            }).catch(function (err) {
+                layer.closeAll('loading');
+                layer.msg('failed', {
+                    icon: 2,
+                    time: 2000
                 });
-            }.bind(this));
+            });
         },
         submitAddNoteForm: function submitAddNoteForm(event) {
-            var addNoteMessage = Messenger().info({
-                message: "processing...."
-            });
+            layer.load(2, { time: 10000 });
             axios.post('/notes', {
                 title: this.title,
                 content: this.content,
                 classification: this.classification
             }).then(function (res) {
-                addNoteMessage.update({
-                    type: "success",
-                    message: "add success"
+                layer.closeAll('loading');
+                layer.msg('success!!', {
+                    icon: 1,
+                    time: 1000
+                }, function () {
+                    $('#addNoteModal').modal('hide');
+                    setTimeout("location.reload()", 500);
                 });
-                $('#addNoteModal').modal('hide');
-                setTimeout("location.reload()", 500);
-            }.bind(this)).catch(function (err) {
-                Messenger().error({
-                    message: 123
+            }).catch(function (err) {
+                layer.closeAll('loading');
+                layer.msg('failed', {
+                    icon: 2,
+                    time: 2000
                 });
-            }.bind(this));
+            });
         }
     }
 });
