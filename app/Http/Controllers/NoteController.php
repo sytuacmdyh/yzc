@@ -132,6 +132,20 @@ class NoteController extends Controller
     public function destroy(Note $note)
     {
         $note->delete();
+        
         return 'ok';
+    }
+
+    public function forceDelete(Request $request)
+    {
+        $noteId = $request->input('noteId');
+
+        $note = Note::withTrashed()
+                ->where('id', $noteId)
+                ->first();
+        
+        $note->forceDelete();
+
+        return 0;
     }
 }

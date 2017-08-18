@@ -18,3 +18,4 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('notes', 'NoteController');
+Route::post('notes/delete', 'NoteController@forceDelete');

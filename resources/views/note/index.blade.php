@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container" id="noteContainer">
 	<div class="row">
 		<ol class="breadcrumb" style="background-color: #fff">
 			<li><a href="{{ route('home') }}">Home</a></li>
@@ -44,6 +44,10 @@
 							<button class="btn btn-sm" v-on:click="completeNote('{{$note->id}}')"><span class="glyphicon glyphicon-ok"></span></button>
 							<button class="btn btn-sm" v-on:click="deleteNote('{{$note->id}}')"><span class="glyphicon glyphicon-trash"></span></button>
 							{{-- <button class="btn btn-sm" v-on:click="editNote('{{$note->id}}')"><span class="glyphicon glyphicon-edit"></span></button> --}}
+						</td>
+						@elseif ($deleted)
+						<td>
+							<button class="btn btn-sm" v-on:click="deleteNoteForce('{{$note->id}}')"><span class="glyphicon glyphicon-trash"></span></button>
 						</td>
 						@endif
 					  </tr>
