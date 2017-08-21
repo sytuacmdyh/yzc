@@ -70,6 +70,13 @@
 		</div>
 		<div class="modal-body">
 		  <form role="form">
+		  	<div class="form-group" v-if="errors.length>0">
+		  		<div class="alert alert-danger">
+			        <ul>
+			            <li v-for="error in errors">@{{ error }}</li>
+			        </ul>
+			    </div>
+		  	</div>
 			<div class="form-group">
 			  <label><span class="glyphicon glyphicon-tag"></span> Title</label>
 			  <input type="text" class="form-control" v-model="title" placeholder="Enter title">
