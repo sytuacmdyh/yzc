@@ -17,5 +17,8 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 
-Route::middleware('auth:api')->get('/test', 'HomeController@testApi')->name('testapi');
-Route::get('/getToken', 'HomeController@getToken')->name('getToken');
+
+Route::get('/getToken', 'NoteApiController@getToken')->name('getToken');
+
+Route::get('/test', 'NoteApiController@testApi')->name('testapi');
+Route::get('/getNotes', 'NoteApiController@listNotes')->name('getNotes');

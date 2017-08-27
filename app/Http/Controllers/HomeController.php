@@ -31,12 +31,4 @@ class HomeController extends Controller
     {
         return view('welcome');
     }
-
-    public function testApi(){
-        return 'yzccz';
-    }
-
-    public function getToken(){
-        return \App\User::find(1)->createToken('testToken')->accessToken;
-    }
 }
