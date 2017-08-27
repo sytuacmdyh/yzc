@@ -14,7 +14,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth')->except('welcome');
+        $this->middleware('auth')->only('index');
     }
 
     /**
@@ -30,5 +30,13 @@ class HomeController extends Controller
     public function welcome()
     {
         return view('welcome');
+    }
+
+    public function testApi(){
+        return 'yzccz';
+    }
+
+    public function getToken(){
+        return \App\User::find(1)->createToken('testToken')->accessToken;
     }
 }
