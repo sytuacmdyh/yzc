@@ -71,7 +71,7 @@ const note = new Vue({
                 });
             }).catch(function(err) {
                 if(err.response.status==422){
-                    var data = err.response.data;
+                    var data = err.response.data.errors;
                     for(var item in data){
                         this.errors.push(item+' :: '+data[item]);
                     }
