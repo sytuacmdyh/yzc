@@ -23,9 +23,9 @@ class NoteController extends Controller
         $status = $request->input('status');
         $deleted = $request->input('deleted');
 
-        $pendingCount = Note::where('status','pending')->count();
-        $completedCount = Note::where('status','completed')->count();
-        $deletedCount = Note::onlyTrashed()->count();
+        $pendingCount = Note::where('status','pending')->where('user_id',$request->user()->id)->count();
+        $completedCount = Note::where('status','completed')->where('user_id',$request->user()->id)->count();
+        $deletedCount = Note::onlyTrashed()->where('user_id',$request->user()->id)->count();
         $counts = [
             'pendingCount'=>$pendingCount,
             'completedCount'=>$completedCount,
@@ -38,7 +38,7 @@ class NoteController extends Controller
             return $query->where('status','pending');
         })->when($deleted,function ($query) {
             return $query->onlyTrashed();
-        })->paginate(15);
+        })->where('user_id',$request->user()->id)->paginate(15);
 
         return view('note.index', 
             ['notes' => $notes, 
