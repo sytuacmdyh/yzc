@@ -5,11 +5,13 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=7.0",
+        "php": ">=7.1",
         "barryvdh/laravel-debugbar": "^2.4",
         "laravel/framework": "5.5.*",
+        "laravel/horizon": "^1.0",
         "laravel/passport": "^3.0",
-        "laravel/tinker": "~1.0"
+        "laravel/tinker": "~1.0",
+        "predis/predis": "^1.1"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.4",
@@ -54,7 +56,7 @@
         "sort-packages": true,
         "optimize-autoloader": true,
         "platform": {
-            "php": "7.0"
+            "php": "7.1"
         }
     }
 }

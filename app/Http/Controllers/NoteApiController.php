@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Note;
+use App\Jobs\TestDelay;
 use Illuminate\Http\Request;
 
 class NoteApiController extends Controller
@@ -22,6 +23,7 @@ class NoteApiController extends Controller
 
     public function listNotes()
     {
+        TestDelay::dispatch(5);
     	return Note::all();
     }
 }
