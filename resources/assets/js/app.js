@@ -17,3 +17,6 @@ Vue.component('example', require('./components/Example.vue'));
 // const app = new Vue({
 //     el: '#app'
 // });
+
+window.hljs = require('highlight.js');
+window.hljs.initHighlightingOnLoad();

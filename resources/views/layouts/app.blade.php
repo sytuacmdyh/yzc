@@ -71,12 +71,11 @@
                 </div>
             </div>
         </nav>
+
+        <!-- Scripts -->
+        <script src="{{ mix('js/app.js') }}"></script>
+        <script src="{{ asset('js/layer/layer.js') }}"></script>
         @yield('content')
     </div>
-
-    <!-- Scripts -->
-    <script src="{{ mix('js/app.js') }}"></script>
-    <script src="{{ asset('js/layer/layer.js') }}"></script>
-    <script src="{{ mix('js/note.js') }}"></script>
 </body>
 </html>

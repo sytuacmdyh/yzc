@@ -8,5 +8,8 @@
 // Bootstrap
 @import "~bootstrap-sass/assets/stylesheets/bootstrap";
 
+//highlight.js
+@import "~highlight.js/styles/darcula.css";
+
 @import "./messenger.css";
 @import "./messenger-theme-future.css";

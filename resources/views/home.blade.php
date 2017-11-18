@@ -15,6 +15,7 @@
                 </div>
                 <div class="panel-body">
                     <a href="{{route('notes.index')}}" class="btn btn-default btn-block">Note</a>
+                    <a href="{{route('shares.index')}}" class="btn btn-default btn-block">Share</a>
                 </div>
             </div>
         </div>
