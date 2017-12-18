@@ -49,15 +49,18 @@ class ShareController extends Controller
             'file'      => 'required_without:shareData|file',
         ]);
 
-        $file     = $request->file('file');
-        $filePath = $file->storeAs('uploads/' . $request->user()->id, $file->getClientOriginalName());
-
         $share            = new Share();
         $share->user_id   = $request->user()->id;
         $share->data      = $request->input('shareData')?:'';
         $share->type      = 'other';
         $share->is_public = $request->input('is_public');
-        $share->file_name = $filePath;
+
+        $file     = $request->file('file');
+        if($file && $file->isValid()){
+            $filePath = $file->storeAs('uploads/' . $request->user()->id, $file->getClientOriginalName());
+            $share->file_name = $filePath;
+        }
+
         $share->save();
 
         return redirect(route('shares.index'));
