@@ -49,6 +49,9 @@
                                 <pre>
                                     <code class="">{{e(@$sharesPublic[$i]['data'])}}</code>
                                 </pre>
+                                @if(@$sharesPublic[$i]['file_name'])
+                                    <a href="{{$urlPrefix.$sharesPublic[$i]['file_name']}}" class="btn btn-default" download="download">Download</a>
+                                @endif
                             </div>
                         @endfor
                     </div>

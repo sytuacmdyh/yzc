@@ -19,7 +19,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group{{ $errors->has('shareData') ? ' has-error' : '' }}">
                             <textarea name="shareData" class="form-control" cols="30" rows="10"
                                       placeholder="please input the data to share"></textarea>
                             @if ($errors->has('shareData'))
@@ -28,7 +28,7 @@
                                     </span>
                             @endif
                         </div>
-                        <div class="form-group">
+                        <div class="form-group{{ $errors->has('file') ? ' has-error' : '' }}">
                             <input type="file" class="form-control" name="file">
                             @if ($errors->has('file'))
                                 <span class="help-block">
