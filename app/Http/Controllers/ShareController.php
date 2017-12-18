@@ -19,9 +19,10 @@ class ShareController extends Controller
      */
     public function index()
     {
-        $shares = Share::whereUserId(\Auth::user()->id)->orderBy('updated_at', 'desc')->take(10)->get()->toArray();
+        $shares       = Share::whereUserId(\Auth::user()->id)->orderBy('updated_at', 'desc')->take(10)->get()->toArray();
         $sharesPublic = Share::whereIsPublic(true)->orderBy('updated_at', 'desc')->take(10)->get()->toArray();
-        return view('share.index', compact('shares','sharesPublic'));
+        $urlPrefix    = \Storage::url('');
+        return view('share.index', compact('shares', 'sharesPublic', 'urlPrefix'));
     }
 
     /**
@@ -43,15 +44,20 @@ class ShareController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'shareData' => 'required',
             'is_public' => 'required|boolean',
+            'shareData' => 'required_without:file',
+            'file'      => 'required_without:shareData|file',
         ]);
+
+        $file     = $request->file('file');
+        $filePath = $file->storeAs('uploads/' . $request->user()->id, $file->getClientOriginalName());
 
         $share            = new Share();
         $share->user_id   = $request->user()->id;
-        $share->data      = $request->input('shareData');
+        $share->data      = $request->input('shareData')?:'';
         $share->type      = 'other';
         $share->is_public = $request->input('is_public');
+        $share->file_name = $filePath;
         $share->save();
 
         return redirect(route('shares.index'));

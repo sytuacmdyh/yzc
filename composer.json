@@ -8,6 +8,7 @@
         "php": ">=7.1",
         "barryvdh/laravel-debugbar": "^2.4",
         "guzzlehttp/guzzle": "^6.3",
+        "jacobcyl/ali-oss-storage": "^2.0",
         "laravel/framework": "5.5.*",
         "laravel/horizon": "^1.0",
         "laravel/passport": "^3.0",

@@ -22,6 +22,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Share whereUserId($value)
  * @property int $is_public
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Share whereIsPublic($value)
+ * @property string|null $file_name
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Share whereFileName($value)
  */
 class Share extends Model
 {
