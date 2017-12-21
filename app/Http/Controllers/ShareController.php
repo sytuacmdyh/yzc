@@ -27,10 +27,12 @@ class ShareController extends Controller
         $urlPrefixBefore = \Storage::disk('oss')->url('');
 
         $shares->map(function (Share $item) use ($urlPrefixBefore, $urlPrefixToday) {
-            $item->file_name = \Storage::exists($item->file_name) ? $urlPrefixToday . $item->file_name : $urlPrefixBefore . $item->file_name;
+            if ($item->file_name)
+                $item->file_name = \Storage::exists($item->file_name) ? $urlPrefixToday . $item->file_name : $urlPrefixBefore . $item->file_name;
         });
         $sharesPublic->map(function (Share $item) use ($urlPrefixBefore, $urlPrefixToday) {
-            $item->file_name = \Storage::exists($item->file_name) ? $urlPrefixToday . $item->file_name : $urlPrefixBefore . $item->file_name;
+            if ($item->file_name)
+                $item->file_name = \Storage::exists($item->file_name) ? $urlPrefixToday . $item->file_name : $urlPrefixBefore . $item->file_name;
         });
 
         return view('share.index', compact('shares', 'sharesPublic'));
