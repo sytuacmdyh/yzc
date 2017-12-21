@@ -24,7 +24,7 @@
                                     <code class="">{{e(@$shares[$i]['data'])}}</code>
                                 </pre>
                                 @if(@$shares[$i]['file_name'])
-                                    <a href="{{$urlPrefix.$shares[$i]['file_name']}}" class="btn btn-default" download="download">Download</a>
+                                    <a href="{{$shares[$i]['file_name']}}" class="btn btn-default" download="">Download</a>
                                 @endif
                             </div>
                         @endfor
@@ -50,7 +50,7 @@
                                     <code class="">{{e(@$sharesPublic[$i]['data'])}}</code>
                                 </pre>
                                 @if(@$sharesPublic[$i]['file_name'])
-                                    <a href="{{$urlPrefix.$sharesPublic[$i]['file_name']}}" class="btn btn-default" download="download">Download</a>
+                                    <a href="{{$sharesPublic[$i]['file_name']}}" class="btn btn-default" download="">Download</a>
                                 @endif
                             </div>
                         @endfor

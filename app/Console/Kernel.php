@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Jobs\UploadToOss;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -26,6 +27,10 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+//        $schedule->call(function (){
+//            \Storage::delete('uploads/183/1');
+//        })->everyMinute();
+        $schedule->job(new UploadToOss())->daily();
     }
 
     /**

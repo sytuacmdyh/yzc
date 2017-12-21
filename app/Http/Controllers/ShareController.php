@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\UploadToOss;
 use App\Share;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ShareController extends Controller
@@ -19,10 +21,19 @@ class ShareController extends Controller
      */
     public function index()
     {
-        $shares       = Share::whereUserId(\Auth::user()->id)->orderBy('updated_at', 'desc')->take(10)->get()->toArray();
-        $sharesPublic = Share::whereIsPublic(true)->orderBy('updated_at', 'desc')->take(10)->get()->toArray();
-        $urlPrefix    = \Storage::url('');
-        return view('share.index', compact('shares', 'sharesPublic', 'urlPrefix'));
+        $shares          = Share::whereUserId(\Auth::user()->id)->orderBy('updated_at', 'desc')->take(10)->get();
+        $sharesPublic    = Share::whereIsPublic(true)->orderBy('updated_at', 'desc')->take(10)->get();
+        $urlPrefixToday  = \Storage::url('');
+        $urlPrefixBefore = \Storage::disk('oss')->url('');
+
+        $shares->map(function (Share $item) use ($urlPrefixBefore, $urlPrefixToday) {
+            $item->file_name = \Storage::exists($item->file_name) ? $urlPrefixToday . $item->file_name : $urlPrefixBefore . $item->file_name;
+        });
+        $sharesPublic->map(function (Share $item) use ($urlPrefixBefore, $urlPrefixToday) {
+            $item->file_name = \Storage::exists($item->file_name) ? $urlPrefixToday . $item->file_name : $urlPrefixBefore . $item->file_name;
+        });
+
+        return view('share.index', compact('shares', 'sharesPublic'));
     }
 
     /**
@@ -51,13 +62,13 @@ class ShareController extends Controller
 
         $share            = new Share();
         $share->user_id   = $request->user()->id;
-        $share->data      = $request->input('shareData')?:'';
+        $share->data      = $request->input('shareData') ?: '';
         $share->type      = 'other';
         $share->is_public = $request->input('is_public');
 
-        $file     = $request->file('file');
-        if($file && $file->isValid()){
-            $filePath = $file->storeAs('uploads/' . $request->user()->id, $file->getClientOriginalName());
+        $file = $request->file('file');
+        if ($file && $file->isValid()) {
+            $filePath         = $file->storeAs('uploads/' . $request->user()->id, $file->getClientOriginalName());
             $share->file_name = $filePath;
         }
 
