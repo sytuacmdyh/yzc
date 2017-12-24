@@ -30,7 +30,7 @@ class Kernel extends ConsoleKernel
 //        $schedule->call(function (){
 //            \Storage::delete('uploads/183/1');
 //        })->everyMinute();
-        $schedule->job(new UploadToOss())->daily();
+        #$schedule->job(new UploadToOss())->daily();
     }
 
     /**
