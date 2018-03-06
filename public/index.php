@@ -19,7 +19,7 @@
 |
 */
 
-require __DIR__.'/../bootstrap/autoload.php';
+require __DIR__ . '/../bootstrap/autoload.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +33,7 @@ require __DIR__.'/../bootstrap/autoload.php';
 |
 */
 
-$app = require_once __DIR__.'/../bootstrap/app.php';
+$app = require_once __DIR__ . '/../bootstrap/app.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +52,16 @@ $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 $response = $kernel->handle(
     $request = Illuminate\Http\Request::capture()
 );
+
+//if($response instanceof \Symfony\Component\HttpFoundation\Response){
+//    $data = json_decode($response->getContent(), true);
+//    if($data && @$data['access_token']){
+//        @$data['access_token'] = 'heiheiheihheiheiheiheihheiheiheiheihheiheiheiheihhei';
+//        @$data['refresh_token'] = 'heiheiheihheiheiheiheihheiheiheiheihheiheiheiheihhei';
+//        $response->setContent(json_encode($data));
+//        Log::error('xiaoai',$data);
+//    }
+//}
 
 $response->send();
 
