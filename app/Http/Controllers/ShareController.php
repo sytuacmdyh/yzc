@@ -24,15 +24,14 @@ class ShareController extends Controller
         $shares          = Share::whereUserId(\Auth::user()->id)->orderBy('updated_at', 'desc')->take(10)->get();
         $sharesPublic    = Share::whereIsPublic(true)->orderBy('updated_at', 'desc')->take(10)->get();
         $urlPrefixToday  = \Storage::url('');
-        $urlPrefixBefore = \Storage::disk('oss')->url('');
 
-        $shares->map(function (Share $item) use ($urlPrefixBefore, $urlPrefixToday) {
+        $shares->map(function (Share $item) use ($urlPrefixToday) {
             if ($item->file_name)
-                $item->file_name = \Storage::exists($item->file_name) ? $urlPrefixToday . $item->file_name : $urlPrefixBefore . $item->file_name;
+                $item->file_name = $urlPrefixToday . $item->file_name ;
         });
-        $sharesPublic->map(function (Share $item) use ($urlPrefixBefore, $urlPrefixToday) {
+        $sharesPublic->map(function (Share $item) use ($urlPrefixToday) {
             if ($item->file_name)
-                $item->file_name = \Storage::exists($item->file_name) ? $urlPrefixToday . $item->file_name : $urlPrefixBefore . $item->file_name;
+                $item->file_name = $urlPrefixToday . $item->file_name;
         });
 
         return view('share.index', compact('shares', 'sharesPublic'));
