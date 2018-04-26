@@ -21,3 +21,6 @@ Route::resource('notes', 'NoteController');
 Route::post('notes/delete', 'NoteController@forceDelete');
 
 Route::resource('shares', 'ShareController');
+
+Route::view('tools','tool.dashboard')->name('toolList');
+Route::post('tools/font_pruner', 'ToolController@fontPrune')->name('fontPrune');
