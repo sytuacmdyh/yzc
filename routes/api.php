@@ -24,7 +24,3 @@ Route::get('/test', 'NoteApiController@testApi')->name('testapi');
 Route::get('/getNotes', 'NoteApiController@listNotes')->name('getNotes');
 
 Route::post('/xiaoai', 'XiaoAiApiController@test');
-
-Route::get('/abc', function (){
-    return '嘿嘿';
-});
