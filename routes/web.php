@@ -12,6 +12,7 @@
 */
 
 Route::get('/', 'HomeController@welcome')->name('welcome');
+Route::get('/health', 'HomeController@welcome')->name('welcome');
 
 Auth::routes();
 

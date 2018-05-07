@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Note;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -30,5 +31,10 @@ class HomeController extends Controller
     public function welcome()
     {
         return view('welcome');
+    }
+
+    public function health()
+    {
+        return JsonResponse::create(['time' => now()->toDateTimeString(), 'msg' => 'welcome to yzc']);
     }
 }
