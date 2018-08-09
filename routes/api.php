@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 
 
 Route::get('/getToken', 'NoteApiController@getToken')->name('getToken');
+Route::post('/wxSendTemplate', 'NoteApiController@wxSendTemplate')->name('wxSendTemplate');
 
 Route::get('/test', 'NoteApiController@testApi')->name('testapi');
 Route::get('/getNotes', 'NoteApiController@listNotes')->name('getNotes');

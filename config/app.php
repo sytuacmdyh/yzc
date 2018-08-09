@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'wx_app_id' => env('WX_APP_ID', 'WX_APP_ID'),
+    'wx_app_secret' => env('WX_APP_SECRET', 'WX_APP_SECRET'),
+
 
     /*
     |--------------------------------------------------------------------------
