@@ -15,7 +15,7 @@ class NoteApiController extends Controller
 
     public function __construct()
     {
-        if(!\App::environment('local')){
+        if (!\App::environment('local')) {
             $this->middleware('auth:api')->except('getToken');
         }
         $this->wx_app_id     = config('app.wx_app_id');
@@ -36,7 +36,7 @@ class NoteApiController extends Controller
 
             $res         = json_decode($jsonResponse, true);
             $accessToken = $res['access_token'];
-            \Cache::set($this->wx_token_key, $accessToken, $res['expires_in']);
+            \Cache::set($this->wx_token_key, $accessToken, $res['expires_in'] / 60);
         }
         return $accessToken;
     }
@@ -59,17 +59,35 @@ class NoteApiController extends Controller
 
     public function wxSendTemplate(Request $request)
     {
-        $token       = $this->getWxAccessToken();
+        $token = $this->getWxAccessToken();
 
-        $formId      = $request->formId;
+        $form_id     = $request->formId;
         $touser      = $request->touser;
         $template_id = 'SrQoNUrohGe3w_MnaybJs2_ldUmn2PFKuPf4htwZCi8';
         $data        = [];
 
         $res = (new Client())->post("https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=$token", [
-            'json' => compact('formId', 'touser', 'template_id', 'data')
+            'json' => compact('form_id', 'touser', 'template_id', 'data')
         ])->getBody()->getContents();
 
         return json_decode($res, true);
+    }
+
+    public function wxLogin(Request $request)
+    {
+        $code = $request->code;
+
+        $jsonResponse = (new Client())->get('https://api.weixin.qq.com/sns/jscode2session', [
+            'query' => [
+                'grant_type' => 'authorization_code',
+                'appid'      => $this->wx_app_id,
+                'secret'     => $this->wx_app_secret,
+                'js_code'    => $code
+            ]
+        ])->getBody()->getContents();
+
+        $res = json_decode($jsonResponse, true);
+
+        return $res;
     }
 }
