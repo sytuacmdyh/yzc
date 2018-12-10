@@ -26,3 +26,5 @@ Route::get('/test', 'NoteApiController@testApi')->name('testapi');
 Route::get('/getNotes', 'NoteApiController@listNotes')->name('getNotes');
 
 Route::post('/xiaoai', 'XiaoAiApiController@test');
+
+Route::post('/recordIp', 'HomeController@recordIp');
