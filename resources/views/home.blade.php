@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container" id="home" >
+    <div class="container" id="home">
         <vue-canvas-nest :config="{color:'100,100,100', count: 128}"></vue-canvas-nest>
         <div class="row">
             <ol class="breadcrumb" style="background-color: #fff">
@@ -21,6 +21,9 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="well">
+            {{$ip}}
         </div>
     </div>
     <script src="{{ mix('js/home.js') }}"></script>

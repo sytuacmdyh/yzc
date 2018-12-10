@@ -27,7 +27,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        return view('home')->with('ip', Redis::connection()->get('200ip'));
     }
 
     public function welcome()
