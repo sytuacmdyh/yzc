@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Note;
+use function dump;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Redis;
+use Illuminate\Support\Facades\Redis;
 
 class HomeController extends Controller
 {
@@ -41,6 +42,7 @@ class HomeController extends Controller
 
     public function recordIp(Request $request)
     {
-        \Redis::connection()->set('200ip', $request->ip());
+        Redis::connection()->set('200ip', $request->header('ali-cdn-real-ip'));
+        return $request->header('ali-cdn-real-ip');
     }
 }
