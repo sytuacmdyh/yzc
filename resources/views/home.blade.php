@@ -20,11 +20,12 @@
                         <a href="{{url('/notebook')}}" class="btn btn-default btn-block">Jupyter Notebook</a>
                     </div>
                 </div>
+                <div class="alert alert-info">
+                    {{$ip}}
+                </div>
             </div>
         </div>
-        <div class="well">
-            {{$ip}}
-        </div>
+
     </div>
     <script src="{{ mix('js/home.js') }}"></script>
 @endsection
