@@ -17,6 +17,7 @@
                     <div class="panel-body">
                         <a href="{{url('/notes')}}" class="btn btn-default btn-block">Note</a>
                         <a href="{{url('/shares')}}" class="btn btn-default btn-block">Share</a>
+                        <a href="{{'http://git.yzccz.cn/'}}" class="btn btn-default btn-block">Git</a>
                         <a href="{{url('/notebook')}}" class="btn btn-default btn-block">Jupyter Notebook</a>
                     </div>
                 </div>
