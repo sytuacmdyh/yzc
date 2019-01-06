@@ -21,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
             ->regionId('cn-hangzhou')
             ->asGlobalClient();
 
-        \URL::forceScheme('https');
+//        \URL::forceScheme('https');
         Schema::defaultStringLength(191);
         Horizon::auth(function ($request) {
             return true;
