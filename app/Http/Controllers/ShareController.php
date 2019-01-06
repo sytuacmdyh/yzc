@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use AlibabaCloud\Client\AlibabaCloud;
 use App\Jobs\UploadToOss;
 use App\Share;
+use Cache;
 use Carbon\Carbon;
 use function compact;
 use Illuminate\Http\Request;
@@ -24,9 +25,9 @@ class ShareController extends Controller
      */
     public function index()
     {
-        $shares         = Share::whereUserId(\Auth::user()->id)->orderBy('updated_at', 'desc')->take(10)->get();
-        $sharesPublic   = Share::whereIsPublic(true)->orderBy('updated_at', 'desc')->take(10)->get();
-        $urlPrefix = 'https://cdn.yzccz.cn/';
+        $shares       = Share::whereUserId(\Auth::user()->id)->orderBy('updated_at', 'desc')->take(10)->get();
+        $sharesPublic = Share::whereIsPublic(true)->orderBy('updated_at', 'desc')->take(10)->get();
+        $urlPrefix    = 'https://cdn.yzccz.cn/';
 
         $shares->map(function (Share $item) use ($urlPrefix) {
             if ($item->file_name)
@@ -41,11 +42,11 @@ class ShareController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return string
      * @throws \AlibabaCloud\Client\Exception\ClientException
      * @throws \AlibabaCloud\Client\Exception\ServerException
      */
-    public function create()
+    private function getOssConfig()
     {
         $result = AlibabaCloud::sts()->v20150401()->assumeRole()
             ->withRoleSessionName('ossToken')
@@ -67,16 +68,30 @@ class ShareController extends Controller
     ],
     "Version": "1"
 }
-        ')
-            ->request()->toArray();
+        ')->request()->toArray();
 
-        $config = json_encode([
+        return json_encode([
             "region"          => 'oss-cn-hangzhou',
             "accessKeyId"     => $result['Credentials']['AccessKeyId'],
             "accessKeySecret" => $result['Credentials']['AccessKeySecret'],
             "stsToken"        => $result['Credentials']['SecurityToken'],
             "bucket"          => 'yzc-dyh-hz'
         ]);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \AlibabaCloud\Client\Exception\ClientException
+     * @throws \AlibabaCloud\Client\Exception\ServerException
+     */
+    public function create()
+    {
+        $key    = 'ossConfig';
+        $config = Cache::get($key);
+        if (!$config) {
+            $config = $this->getOssConfig();
+            Cache::add($key, $config, 15);
+        }
 
         return view('share.create', compact('config'));
     }
