@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use AlibabaCloud\Client\AlibabaCloud;
 use App\Jobs\UploadToOss;
 use App\Share;
 use Carbon\Carbon;
+use function compact;
 use Illuminate\Http\Request;
+use function json_encode;
 
 class ShareController extends Controller
 {
@@ -21,30 +24,61 @@ class ShareController extends Controller
      */
     public function index()
     {
-        $shares          = Share::whereUserId(\Auth::user()->id)->orderBy('updated_at', 'desc')->take(10)->get();
-        $sharesPublic    = Share::whereIsPublic(true)->orderBy('updated_at', 'desc')->take(10)->get();
-        $urlPrefixToday  = \Storage::url('');
+        $shares         = Share::whereUserId(\Auth::user()->id)->orderBy('updated_at', 'desc')->take(10)->get();
+        $sharesPublic   = Share::whereIsPublic(true)->orderBy('updated_at', 'desc')->take(10)->get();
+        $urlPrefix = 'https://cdn.yzccz.cn/';
 
-        $shares->map(function (Share $item) use ($urlPrefixToday) {
+        $shares->map(function (Share $item) use ($urlPrefix) {
             if ($item->file_name)
-                $item->file_name = $urlPrefixToday . $item->file_name ;
+                $item->file_name = $urlPrefix . $item->file_name;
         });
-        $sharesPublic->map(function (Share $item) use ($urlPrefixToday) {
+        $sharesPublic->map(function (Share $item) use ($urlPrefix) {
             if ($item->file_name)
-                $item->file_name = $urlPrefixToday . $item->file_name;
+                $item->file_name = $urlPrefix . $item->file_name;
         });
 
         return view('share.index', compact('shares', 'sharesPublic'));
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \AlibabaCloud\Client\Exception\ClientException
+     * @throws \AlibabaCloud\Client\Exception\ServerException
      */
     public function create()
     {
-        return view('share.create');
+        $result = AlibabaCloud::sts()->v20150401()->assumeRole()
+            ->withRoleSessionName('ossToken')
+            ->withDurationSeconds(60 * 15)
+            ->withRoleArn("acs:ram::1822006838390050:role/yzc-admin")
+            ->withPolicy('
+ {
+    "Statement": [
+        {
+            "Action": [
+                "oss:PutObject"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "acs:oss:*:*:yzc-dyh-hz/*",
+                "acs:oss:*:*:yzc-dyh-hz"
+            ]
+        }
+    ],
+    "Version": "1"
+}
+        ')
+            ->request()->toArray();
+
+        $config = json_encode([
+            "region"          => 'oss-cn-hangzhou',
+            "accessKeyId"     => $result['Credentials']['AccessKeyId'],
+            "accessKeySecret" => $result['Credentials']['AccessKeySecret'],
+            "stsToken"        => $result['Credentials']['SecurityToken'],
+            "bucket"          => 'yzc-dyh-hz'
+        ]);
+
+        return view('share.create', compact('config'));
     }
 
     /**
@@ -58,7 +92,7 @@ class ShareController extends Controller
         $this->validate($request, [
             'is_public' => 'required|boolean',
             'shareData' => 'required_without:file',
-            'file'      => 'required_without:shareData|file',
+            'file'      => 'required_without:shareData',
         ]);
 
         $share            = new Share();
@@ -66,12 +100,7 @@ class ShareController extends Controller
         $share->data      = $request->input('shareData') ?: '';
         $share->type      = 'other';
         $share->is_public = $request->input('is_public');
-
-        $file = $request->file('file');
-        if ($file && $file->isValid()) {
-            $filePath         = $file->storeAs('uploads/' . $request->user()->id, $file->getClientOriginalName());
-            $share->file_name = $filePath;
-        }
+        $share->file_name = $request->input('file');
 
         $share->save();
 

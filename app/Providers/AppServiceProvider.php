@@ -2,10 +2,11 @@
 
 namespace App\Providers;
 
-use App\Console\Commands\RouteListSimple;
+use function config;
 use Laravel\Horizon\Horizon;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use AlibabaCloud\Client\AlibabaCloud;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,10 +17,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        AlibabaCloud::accessKeyClient(config('app.ali_key'), config('app.ali_secret'))
+            ->regionId('cn-hangzhou')
+            ->asGlobalClient();
+
         \URL::forceScheme('https');
         Schema::defaultStringLength(191);
         Horizon::auth(function ($request) {
-             return true;
+            return true;
         });
     }
 

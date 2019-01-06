@@ -1,5 +1,8 @@
 <?php
 
+use AlibabaCloud\Client\AlibabaCloud;
+use AlibabaCloud\Sts\StsVersion;
+use AlibabaCloud\Sts\V20150401\StsApiResolver;
 use Illuminate\Http\Request;
 
 /*
