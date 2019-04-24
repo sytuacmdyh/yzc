@@ -26,6 +26,7 @@ Route::post('/wxSendTemplate', 'NoteApiController@wxSendTemplate')->name('wxSend
 Route::post('/wxLogin', 'NoteApiController@wxLogin')->name('wxLogin');
 
 Route::get('/test', 'NoteApiController@testApi')->name('testapi');
+Route::get('/odoo/userinfo', 'NoteApiController@userInfo')->name('odoo_userInfo');
 Route::get('/getNotes', 'NoteApiController@listNotes')->name('getNotes');
 
 Route::post('/xiaoai', 'XiaoAiApiController@test');

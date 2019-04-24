@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use function app;
 use App\Note;
 use App\Jobs\TestDelay;
+use Auth;
+use function dd;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
@@ -15,9 +18,11 @@ class NoteApiController extends Controller
 
     public function __construct()
     {
-        if (!\App::environment('local')) {
-            $this->middleware('auth:api')->except('getToken');
-        }
+//        if (!\App::environment('local')) {
+//            $this->middleware('auth:api')->except('getToken');
+//        }
+        $this->middleware('auth:api')->except('getToken');
+
         $this->wx_app_id     = config('app.wx_app_id');
         $this->wx_app_secret = config('app.wx_app_secret');
     }
@@ -43,7 +48,12 @@ class NoteApiController extends Controller
 
     public function testApi()
     {
-        return 'yzccz';
+        return Auth::user()->toArray();
+    }
+
+    public function userInfo()
+    {
+        return Auth::user()->toArray();
     }
 
     public function getToken()
